@@ -82,7 +82,7 @@ export default function AdminLoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@bellawoman.com"
+                placeholder="sohel@techflux.in"
                 className="w-full pl-10 pr-4 py-3 rounded-xl border border-[#EAE6DF] focus:border-[#FF312C] focus:ring-1 focus:ring-[#FF312C] focus:outline-none text-sm text-[#18181B]"
               />
             </div>
@@ -116,7 +116,7 @@ export default function AdminLoginPage() {
         </form>
 
         <div className="mt-8 pt-6 border-t border-[#EAE6DF] text-center text-[11px] text-[#71717A]">
-          Default credential: <code className="bg-[#FAF9F5] px-2 py-0.5 rounded text-[#06262B] font-mono">admin@bellawoman.com</code> / <code className="bg-[#FAF9F5] px-2 py-0.5 rounded text-[#06262B] font-mono">admin123</code>
+          Authorized credential: <code className="bg-[#FAF9F5] px-2 py-0.5 rounded text-[#06262B] font-mono">Sohel@techflux.in</code>
         </div>
       </div>
     </div>

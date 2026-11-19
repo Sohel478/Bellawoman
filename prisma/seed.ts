@@ -44,19 +44,19 @@ async function main() {
   console.log("✅ Site settings seeded.");
 
   // 2. Admin User
-  const passwordHash = await bcrypt.hash("admin123", 10);
+  const passwordHash = await bcrypt.hash("Momo$143", 10);
   await prisma.adminUser.upsert({
-    where: { email: "admin@bellawoman.com" },
+    where: { email: "sohel@techflux.in" },
     update: { passwordHash },
     create: {
-      name: "BellaWoman Admin",
-      email: "admin@bellawoman.com",
+      name: "Sohel Jatu",
+      email: "sohel@techflux.in",
       passwordHash,
       role: "admin",
       status: "active",
     },
   });
-  console.log("✅ Admin user created: admin@bellawoman.com / admin123");
+  console.log("✅ Admin user created: sohel@techflux.in / Momo$143");
 
   // 3. Category: Activewear
   const activewear = await prisma.category.upsert({

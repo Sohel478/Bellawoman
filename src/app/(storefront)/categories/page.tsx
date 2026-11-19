@@ -45,7 +45,7 @@ export default async function CategoriesPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.map((category) => {
-            const bgImage = category.image || "/products/image-001.jpg";
+            const bgImage = category.image || "/hero/hero-br1091.jpg";
             const count = category._count?.products || 0;
 
             return (

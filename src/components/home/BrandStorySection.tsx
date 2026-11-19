@@ -10,7 +10,7 @@ export function BrandStorySection() {
           {/* Visual Showcase */}
           <div className="relative aspect-[4/5] sm:aspect-square lg:aspect-[4/5] rounded-3xl overflow-hidden shadow-lg border border-[#EAE6DF] bg-[#FAF9F5]">
             <Image
-              src="/products/image-002.jpg"
+              src="/hero/hero-f3bca67d.jpg"
               alt="BellaWoman Lifestyle Movement"
               fill
               className="object-cover object-center"

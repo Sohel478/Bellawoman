@@ -65,8 +65,8 @@ async function main() {
       shortDescription: "Engineered for movement, sculpted for life.",
       description:
         "Step up your routine with BellaWoman's premier Activewear collection. From ultra-soft seamless bras to high-impact workout tops, every silhouette combines buttery 4-way stretch, sweat-wicking technology, and trendsetting editorial styling.",
-      image: "/products/image-001.jpg",
-      bannerImage: "/products/image-002.jpg",
+      image: "/hero/hero-br1091.jpg",
+      bannerImage: "/hero/hero-br1041.jpg",
       status: "published",
       isFeatured: true,
       sortOrder: 1,
@@ -84,8 +84,8 @@ async function main() {
       title: "SCULPTED FOR MOVEMENT",
       subtitle:
         "Discover high-performance sports bras and seamless active essentials tailored for effortless confidence.",
-      desktopImage: "/products/image-010.jpg",
-      mobileImage: "/products/image-011.jpg",
+      desktopImage: "/hero/hero-br1083.jpg",
+      mobileImage: "/hero/hero-br1083.jpg",
       altText: "BellaWoman Activewear Hero Campaign",
       ctaLabel: "Shop the Collection",
       ctaType: "category",

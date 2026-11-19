@@ -28,7 +28,7 @@ export default function AboutPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
         <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-lg border border-[#EAE6DF] bg-[#FAF9F5]">
           <Image
-            src="/products/image-001.jpg"
+            src="/hero/hero-f3bca67d.jpg"
             alt="BellaWoman activewear model"
             fill
             priority

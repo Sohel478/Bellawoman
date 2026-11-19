@@ -29,9 +29,9 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "BellaWoman",
       images: [
         {
-          url: "/products/image-010.jpg",
-          width: 1200,
-          height: 630,
+          url: "/hero/hero-br1083.jpg",
+          width: 1080,
+          height: 1440,
           alt: "BellaWoman Activewear",
         },
       ],
@@ -42,7 +42,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title,
       description,
-      images: ["/products/image-010.jpg"],
+      images: ["/hero/hero-br1083.jpg"],
     },
   };
 }

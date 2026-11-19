@@ -13,7 +13,7 @@ interface FooterProps {
 export function Footer({
   whatsappPhone = "+919876543210",
   contactEmail = "support@bellawoman.com",
-  instagramUrl = "https://instagram.com/bellawoman",
+  instagramUrl = "https://www.instagram.com/official_bellawoman?knvt=MTlud2ZpYmxhMTV0ZQ%3D%3D&utm_source=qr",
   footerAbout = "BellaWoman is an expressive, trend-forward fashion and activewear brand designed for effortless movement, confidence, and modern daily wear.",
 }: FooterProps) {
   const currentYear = new Date().getFullYear();

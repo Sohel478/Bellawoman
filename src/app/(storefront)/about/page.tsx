@@ -2,13 +2,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Sparkles, Heart, Zap, Award } from "lucide-react";
 import { Metadata } from "next";
+import { getSiteSettings } from "@/lib/db";
+import { InstagramVideoSection } from "@/components/instagram/InstagramVideoSection";
 
 export const metadata: Metadata = {
   title: "Our Story & Vision",
   description: "Learn about BellaWoman — where high-performance engineering meets contemporary Gen Z fashion and activewear.",
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const settings = await getSiteSettings();
+  const instagramUrl = settings.instagramUrl || "https://www.instagram.com/official_bellawoman?knvt=MTlud2ZpYmxhMTV0ZQ%3D%3D&utm_source=qr";
+  const whatsappPhone = settings.whatsappPhone || "+919876543210";
+
   return (
     <div className="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Hero Intro */}
@@ -85,6 +91,12 @@ export default function AboutPage() {
           </p>
         </div>
       </div>
+
+      {/* Instagram Videos & Reels Showcase */}
+      <InstagramVideoSection
+        instagramUrl={instagramUrl}
+        whatsappPhone={whatsappPhone}
+      />
     </div>
   );
 }

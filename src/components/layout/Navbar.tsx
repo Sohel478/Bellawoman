@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { Search, Menu, X, MessageCircle, ArrowUpRight } from "lucide-react";
 import { SearchModal } from "@/components/common/SearchModal";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
@@ -16,8 +17,26 @@ interface NavbarProps {
 export function Navbar({ categories = [], whatsappPhone = "+919876543210" }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const pathname = usePathname();
 
   const whatsappUrl = buildWhatsAppLink({ phone: whatsappPhone });
+
+  const isLinkActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    if (pathname === href) return true;
+    if (href !== "/" && pathname.startsWith(href)) return true;
+    return false;
+  };
+
+  const navLinks = [
+    { href: "/categories", label: "Collections" },
+    ...categories.slice(0, 3).map((cat) => ({
+      href: `/category/${cat.slug}`,
+      label: cat.name,
+    })),
+    { href: "/about", label: "Our Story" },
+    { href: "/contact", label: "Contact" },
+  ];
 
   return (
     <>
@@ -50,35 +69,27 @@ export function Navbar({ categories = [], whatsappPhone = "+919876543210" }: Nav
               </Link>
             </div>
 
-            {/* Desktop Navigation Links */}
+            {/* Desktop Navigation Links with Active Highlighting */}
             <nav className="hidden md:flex items-center gap-8">
-              <Link
-                href="/categories"
-                className="text-sm font-semibold text-[#06262B] hover:text-[#FF312C] transition-colors tracking-wide"
-              >
-                Collections
-              </Link>
-              {categories.slice(0, 3).map((cat) => (
-                <Link
-                  key={cat.id}
-                  href={`/category/${cat.slug}`}
-                  className="text-sm font-semibold text-[#06262B] hover:text-[#FF312C] transition-colors tracking-wide"
-                >
-                  {cat.name}
-                </Link>
-              ))}
-              <Link
-                href="/about"
-                className="text-sm font-semibold text-[#06262B] hover:text-[#FF312C] transition-colors tracking-wide"
-              >
-                Our Story
-              </Link>
-              <Link
-                href="/contact"
-                className="text-sm font-semibold text-[#06262B] hover:text-[#FF312C] transition-colors tracking-wide"
-              >
-                Contact
-              </Link>
+              {navLinks.map((link) => {
+                const active = isLinkActive(link.href);
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`relative text-sm tracking-wide transition-colors py-1 ${
+                      active
+                        ? "font-bold text-[#FF312C]"
+                        : "font-semibold text-[#06262B] hover:text-[#FF312C]"
+                    }`}
+                  >
+                    {link.label}
+                    {active && (
+                      <span className="absolute -bottom-1.5 left-0 right-0 h-[2px] bg-[#FF312C] rounded-full" />
+                    )}
+                  </Link>
+                );
+              })}
             </nav>
 
             {/* Action Buttons: Search & WhatsApp */}
@@ -104,41 +115,27 @@ export function Navbar({ categories = [], whatsappPhone = "+919876543210" }: Nav
           </div>
         </div>
 
-        {/* Mobile Slide-Down Menu */}
+        {/* Mobile Slide-Down Menu with Active Highlighting */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-[#EAE6DF] bg-[#FAF9F5] px-4 pt-4 pb-6 space-y-4 animate-in slide-in-from-top-2 duration-200">
             <div className="space-y-1">
-              <Link
-                href="/categories"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block px-3 py-2.5 text-base font-semibold text-[#06262B] hover:bg-white rounded-xl transition"
-              >
-                All Collections
-              </Link>
-              {categories.map((cat) => (
-                <Link
-                  key={cat.id}
-                  href={`/category/${cat.slug}`}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block px-3 py-2.5 text-base font-medium text-[#06262B] hover:bg-white rounded-xl transition pl-6"
-                >
-                  {cat.name}
-                </Link>
-              ))}
-              <Link
-                href="/about"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block px-3 py-2.5 text-base font-semibold text-[#06262B] hover:bg-white rounded-xl transition"
-              >
-                Our Story
-              </Link>
-              <Link
-                href="/contact"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block px-3 py-2.5 text-base font-semibold text-[#06262B] hover:bg-white rounded-xl transition"
-              >
-                Contact
-              </Link>
+              {navLinks.map((link) => {
+                const active = isLinkActive(link.href);
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`block px-3.5 py-2.5 text-base rounded-xl transition ${
+                      active
+                        ? "bg-[#FFF2F1] text-[#FF312C] font-bold border-l-4 border-[#FF312C]"
+                        : "font-semibold text-[#06262B] hover:bg-white"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
             </div>
 
             <div className="pt-2 border-t border-[#EAE6DF]">

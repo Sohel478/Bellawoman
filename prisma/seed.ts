@@ -17,7 +17,10 @@ async function main() {
     { key: "announcementEnabled", value: "true" },
     { key: "contactEmail", value: "support@bellawoman.com" },
     { key: "contactPhone", value: "+91 98765 43210" },
-    { key: "instagramUrl", value: "https://instagram.com/bellawoman" },
+    {
+      key: "instagramUrl",
+      value: "https://www.instagram.com/official_bellawoman?knvt=MTlud2ZpYmxhMTV0ZQ%3D%3D&utm_source=qr",
+    },
     {
       key: "footerAbout",
       value:

@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { ProductItem } from "@/types";
+import { getColourSwatch } from "@/lib/colours";
 
 interface ProductCardProps {
   product: ProductItem;
@@ -124,18 +125,22 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           {distinctColours.length > 0 && (
             <div className="flex items-center -space-x-1" title={distinctColours.join(", ")}>
               {distinctColours.map((c, i) => {
-                let dotBg = "bg-stone-400";
-                const lower = c.toLowerCase();
-                if (lower.includes("poppy") || lower.includes("red")) dotBg = "bg-[#FF312C]";
-                else if (lower.includes("teal")) dotBg = "bg-[#06262B]";
-                else if (lower.includes("charcoal") || lower.includes("black")) dotBg = "bg-zinc-900";
-                else if (lower.includes("rose") || lower.includes("pink")) dotBg = "bg-rose-300";
-                else if (lower.includes("sage") || lower.includes("green")) dotBg = "bg-emerald-600";
-
-                return (
+                const swatch = getColourSwatch(c);
+                return swatch.isTwoTone ? (
                   <span
                     key={i}
-                    className={`inline-block w-2.5 h-2.5 rounded-full border border-white shadow-xs ${dotBg}`}
+                    className="inline-flex w-3 h-3 rounded-full border border-white shadow-xs overflow-hidden -rotate-45 shrink-0"
+                    title={c}
+                  >
+                    <span className="w-1/2 h-full" style={{ backgroundColor: swatch.primaryColor }} />
+                    <span className="w-1/2 h-full" style={{ backgroundColor: swatch.secondaryColor }} />
+                  </span>
+                ) : (
+                  <span
+                    key={i}
+                    className="inline-block w-3 h-3 rounded-full border border-white shadow-xs shrink-0"
+                    style={{ backgroundColor: swatch.primaryColor }}
+                    title={c}
                   />
                 );
               })}

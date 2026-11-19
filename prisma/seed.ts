@@ -426,7 +426,26 @@ async function main() {
   ];
 
   const standardSizes = ["XS", "S", "M", "L", "XL"];
-  const standardColours = ["Poppy Red", "Mineral Teal", "Charcoal Black", "Blush Rose"];
+  const productColoursMap: Record<string, string[]> = {
+    "BR-1012": ["Black / Neon Lime", "Solid Black"],
+    "BR-1023": ["Charcoal Black"],
+    "BR-1032": ["Black / Heather Grey", "Solid Black"],
+    "BR-1034": ["Midnight Black"],
+    "BR-1041": ["Obsidian Black / Mesh"],
+    "BR-1043": ["Deep Plum / Wine"],
+    "BR-1052": ["Warm Nude / Beige"],
+    "BR-1053": ["Olive Khaki"],
+    "BR-1055": ["Vanilla Cream"],
+    "BR-1059": ["Coral Peach"],
+    "BR-1060": ["Mineral Teal"],
+    "BR-1063": ["Burgundy Wine"],
+    "BR-1081": ["Black / Sage Green", "Solid Black"],
+    "BR-1083": ["Core Black"],
+    "BR-1084": ["Optic White"],
+    "BR-1085": ["Dusty Rose Pink"],
+    "BR-1086": ["Matte Black"],
+    "BR-1091": ["Black / White Stripe", "Solid Black"],
+  };
 
   let sortIndex = 1;
   for (const item of rawProducts) {
@@ -486,8 +505,9 @@ async function main() {
     // Variants (Sizes & Colours)
     await prisma.productVariant.deleteMany({ where: { productId: product.id } });
     let vOrder = 0;
+    const colours = productColoursMap[item.sku] || ["Charcoal Black"];
     for (const size of standardSizes) {
-      for (const colour of standardColours) {
+      for (const colour of colours) {
         await prisma.productVariant.create({
           data: {
             productId: product.id,

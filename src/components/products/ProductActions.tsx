@@ -4,6 +4,7 @@ import { useState } from "react";
 import { MessageCircle, ExternalLink, Check, ShoppingBag, ShieldCheck, Truck, RefreshCw } from "lucide-react";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
 import { getMarketplaceMeta } from "@/lib/marketplace";
+import { getColourSwatch } from "@/lib/colours";
 import { ProductItem } from "@/types";
 
 interface ProductActionsProps {
@@ -108,23 +109,41 @@ export function ProductActions({
               </span>
             )}
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2.5">
             {availableColours.map((colour) => {
               const isSelected = selectedColour === colour;
+              const swatch = getColourSwatch(colour);
               return (
                 <button
                   key={colour}
                   type="button"
                   onClick={() => setSelectedColour(colour)}
-                  className={`h-9 px-3.5 rounded-full text-xs font-medium transition-all flex items-center gap-1.5 border ${
+                  className={`h-10 px-4 rounded-full text-xs font-semibold transition-all flex items-center gap-2 border ${
                     isSelected
-                      ? "border-[#FF312C] bg-[#FFF2F1] text-[#FF312C] font-semibold ring-1 ring-[#FF312C]"
-                      : "border-[#EAE6DF] bg-white text-[#71717A] hover:border-[#06262B]/30 hover:text-[#18181B]"
+                      ? "border-[#FF312C] bg-[#FFF2F1] text-[#FF312C] shadow-xs ring-1 ring-[#FF312C]"
+                      : "border-[#EAE6DF] bg-white text-[#18181B] hover:border-[#06262B]/40 hover:bg-[#FAF9F5]"
                   }`}
                   aria-pressed={isSelected}
                 >
-                  {isSelected && <Check className="w-3.5 h-3.5 text-[#FF312C]" />}
+                  {/* Two-tone or solid color swatch */}
+                  {swatch.isTwoTone ? (
+                    <span
+                      className="w-3.5 h-3.5 rounded-full border border-black/15 shadow-xs flex overflow-hidden flex-shrink-0 -rotate-45"
+                      title={colour}
+                    >
+                      <span className="w-1/2 h-full" style={{ backgroundColor: swatch.primaryColor }} />
+                      <span className="w-1/2 h-full" style={{ backgroundColor: swatch.secondaryColor }} />
+                    </span>
+                  ) : (
+                    <span
+                      className="w-3.5 h-3.5 rounded-full border border-black/15 shadow-xs flex-shrink-0"
+                      style={{ backgroundColor: swatch.primaryColor }}
+                      title={colour}
+                    />
+                  )}
+
                   <span>{colour}</span>
+                  {isSelected && <Check className="w-3.5 h-3.5 text-[#FF312C] ml-0.5" />}
                 </button>
               );
             })}

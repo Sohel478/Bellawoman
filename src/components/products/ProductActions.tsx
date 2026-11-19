@@ -46,7 +46,16 @@ export function ProductActions({
     customTemplate: product.whatsappMessageOverride,
   });
 
-  const enabledLinks = product.marketplaceLinks?.filter((l) => l.isEnabled) || [];
+  // Only display Meesho / Amazon / Flipkart links if an actual, valid, non-placeholder URL is present
+  const enabledLinks =
+    product.marketplaceLinks?.filter(
+      (l) =>
+        l.isEnabled &&
+        typeof l.marketplaceUrl === "string" &&
+        l.marketplaceUrl.trim().length > 0 &&
+        l.marketplaceUrl.startsWith("http") &&
+        !l.marketplaceUrl.includes("example")
+    ) || [];
 
   return (
     <div className="space-y-6 pt-2">
@@ -126,17 +135,17 @@ export function ProductActions({
       {/* 3. Streamlined, Unified Purchase Actions */}
       <div className="space-y-4 pt-2">
         {/* Primary Action: Direct WhatsApp Concierge */}
-        <div className="space-y-1.5">
+        <div className="space-y-2">
           <a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2.5 w-full h-13 px-6 rounded-2xl bg-[#06262B] hover:bg-[#0B3B42] text-white font-bold text-sm sm:text-base shadow-sm hover:shadow-md transition-all group"
+            className="flex items-center justify-center gap-3 w-full h-15 sm:h-16 px-8 rounded-2xl bg-[#06262B] hover:bg-[#0B3B42] text-white font-extrabold text-base sm:text-lg shadow-md hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all group"
           >
-            <MessageCircle className="w-5 h-5 text-[#25D366] group-hover:scale-110 transition-transform" />
-            <span>Order on WhatsApp</span>
+            <MessageCircle className="w-6 h-6 text-[#25D366] group-hover:scale-110 transition-transform flex-shrink-0" />
+            <span className="tracking-wide">Order on WhatsApp</span>
           </a>
-          <p className="text-[11px] text-center text-[#71717A] font-light">
+          <p className="text-[11px] sm:text-xs text-center text-[#71717A] font-light">
             Instant size guidance, live stock check & direct concierge ordering
           </p>
         </div>

@@ -106,9 +106,9 @@ export function Navbar({ categories = [], whatsappPhone = "+919876543210" }: Nav
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden sm:inline-flex items-center gap-2 bg-[#FF312C] hover:bg-[#E02621] text-white text-xs md:text-sm font-semibold px-4 py-2.5 rounded-full shadow-sm hover:shadow-md transition-all group"
+                className="hidden sm:inline-flex items-center gap-2.5 bg-[#FF312C] hover:bg-[#E02621] text-white text-sm font-bold px-5 py-2.5 rounded-full shadow-sm hover:shadow-md transition-all group hover:scale-[1.02]"
               >
-                <MessageCircle className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
+                <MessageCircle className="w-4.5 h-4.5 text-white group-hover:scale-110 transition-transform" />
                 <span>WhatsApp Order</span>
               </a>
             </div>

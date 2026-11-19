@@ -499,27 +499,6 @@ async function main() {
         });
       }
     }
-
-    // Marketplace Links (Meesho & Amazon test links)
-    await prisma.productMarketplaceLink.deleteMany({ where: { productId: product.id } });
-    await prisma.productMarketplaceLink.createMany({
-      data: [
-        {
-          productId: product.id,
-          marketplaceName: "Meesho",
-          marketplaceUrl: `https://www.meesho.com/s/p/${item.sku.toLowerCase()}`,
-          isEnabled: true,
-          sortOrder: 1,
-        },
-        {
-          productId: product.id,
-          marketplaceName: "Amazon",
-          marketplaceUrl: `https://www.amazon.in/dp/example-${item.sku.toLowerCase()}`,
-          isEnabled: true,
-          sortOrder: 2,
-        },
-      ],
-    });
   }
 
   console.log(`✅ Seeded ${rawProducts.length} authentic BellaWoman Activewear products!`);

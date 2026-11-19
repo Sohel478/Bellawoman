@@ -9,6 +9,7 @@ import {
   Shirt,
   Image as ImageIcon,
   Settings,
+  TicketPercent,
   LogOut,
   ExternalLink,
   ShieldCheck,
@@ -37,6 +38,7 @@ export function AdminSidebar({ adminName = "Admin" }: AdminSidebarProps) {
     { label: "Categories", href: "/admin/categories", icon: FolderTree },
     { label: "Products", href: "/admin/products", icon: Shirt },
     { label: "Campaign Banners", href: "/admin/banners", icon: ImageIcon },
+    { label: "Discount Coupons", href: "/admin/coupons", icon: TicketPercent },
     { label: "Site Settings", href: "/admin/settings", icon: Settings },
   ];
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MessageCircle, ExternalLink, Check, ShoppingBag, ShieldCheck, Truck, RefreshCw } from "lucide-react";
+import { MessageCircle, ExternalLink, Check, ShoppingBag, ShieldCheck, Truck, RefreshCw, Tag, X, Sparkles, AlertCircle } from "lucide-react";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
 import { getMarketplaceMeta } from "@/lib/marketplace";
 import { getColourSwatch } from "@/lib/colours";
@@ -33,9 +33,88 @@ export function ProductActions({
     availableColours[0] || null
   );
 
+  // Coupon state
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState<{
+    code: string;
+    description: string | null;
+    discountType: string;
+    discountValue: number;
+    discountAmount: number;
+    finalPrice: number;
+    originalPrice: number;
+  } | null>(null);
+  const [couponError, setCouponError] = useState("");
+  const [validatingCoupon, setValidatingCoupon] = useState(false);
+  const [isCouponOpen, setIsCouponOpen] = useState(false);
+
+  const originalPrice = product.displayPrice || 0;
+  const effectivePrice = appliedCoupon ? appliedCoupon.finalPrice : originalPrice;
   const productUrl = `${baseUrl}/product/${product.slug}`;
 
-  // Generate dynamic WhatsApp link including user's selected variant
+  const handleApplyCoupon = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const cleanCode = couponCode.trim().toUpperCase();
+    if (!cleanCode) {
+      setCouponError("Please enter a coupon code.");
+      return;
+    }
+
+    setValidatingCoupon(true);
+    setCouponError("");
+
+    try {
+      const res = await fetch("/api/coupons/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          code: cleanCode,
+          productId: product.id,
+          categoryId: product.primaryCategoryId,
+          price: originalPrice,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.valid) {
+        setCouponError(data.message || "Invalid or ineligible coupon code.");
+        setAppliedCoupon(null);
+      } else {
+        setAppliedCoupon(data.coupon);
+        setCouponError("");
+      }
+    } catch (err: any) {
+      setCouponError(err.message || "Failed to validate coupon.");
+    } finally {
+      setValidatingCoupon(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode("");
+    setCouponError("");
+  };
+
+  // Construct dynamic WhatsApp deep-link including variant and applied coupon
+  let dynamicTemplate = product.whatsappMessageOverride;
+  if (appliedCoupon) {
+    const discountLabel =
+      appliedCoupon.discountType === "percentage"
+        ? `${appliedCoupon.discountValue}% OFF`
+        : `₹${appliedCoupon.discountValue} FLAT OFF`;
+
+    dynamicTemplate =
+      `Hello BellaWoman! I would like to order the *{product}* (SKU: {sku}).\n` +
+      (selectedSize ? `• Size: *${selectedSize}*\n` : "") +
+      (selectedColour ? `• Colour: *${selectedColour}*\n` : "") +
+      `• Original Price: *₹${originalPrice.toLocaleString("en-IN")}*\n` +
+      `• Applied Coupon: *${appliedCoupon.code}* (${discountLabel} — Saved ₹${appliedCoupon.discountAmount.toLocaleString("en-IN")})\n` +
+      `• Final Discounted Price: *₹${effectivePrice.toLocaleString("en-IN")}*\n` +
+      `• Product Link: {url}`;
+  }
+
+  // Generate dynamic WhatsApp link
   const whatsappUrl = buildWhatsAppLink({
     phone: whatsappPhone,
     productName: product.name,
@@ -43,8 +122,8 @@ export function ProductActions({
     productUrl,
     selectedSize,
     selectedColour,
-    price: product.displayPrice,
-    customTemplate: product.whatsappMessageOverride,
+    price: effectivePrice,
+    customTemplate: dynamicTemplate,
   });
 
   // Only display Meesho / Amazon / Flipkart links if an actual, valid, non-placeholder URL is present
@@ -151,6 +230,104 @@ export function ProductActions({
         </div>
       )}
 
+      {/* 2.5 Discount Coupon Widget */}
+      <div className="pt-1">
+        {appliedCoupon ? (
+          <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-center justify-between gap-3 animate-in fade-in duration-200">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 shadow-xs">
+                <Tag className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="font-mono font-black text-xs text-emerald-950 uppercase tracking-wider">
+                    {appliedCoupon.code}
+                  </span>
+                  <span className="text-[10px] font-bold bg-emerald-200/80 text-emerald-900 px-2 py-0.5 rounded-full">
+                    {appliedCoupon.discountType === "percentage"
+                      ? `${appliedCoupon.discountValue}% OFF`
+                      : `₹${appliedCoupon.discountValue} FLAT OFF`}
+                  </span>
+                </div>
+                <p className="text-[11px] text-emerald-800 font-medium truncate mt-0.5">
+                  Saved ₹{appliedCoupon.discountAmount.toLocaleString("en-IN")} • Final:{" "}
+                  <strong className="text-emerald-950 font-bold">
+                    ₹{appliedCoupon.finalPrice.toLocaleString("en-IN")}
+                  </strong>
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleRemoveCoupon}
+              className="text-[11px] font-bold text-emerald-800 hover:text-red-600 px-2.5 py-1 rounded-lg hover:bg-emerald-100 transition flex items-center gap-1 flex-shrink-0"
+              title="Remove coupon"
+            >
+              <X className="w-3.5 h-3.5" />
+              <span>Remove</span>
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {!isCouponOpen ? (
+              <button
+                type="button"
+                onClick={() => setIsCouponOpen(true)}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#06262B] hover:text-[#FF312C] transition-colors py-1 group"
+              >
+                <Tag className="w-3.5 h-3.5 text-[#FF312C] group-hover:rotate-12 transition-transform" />
+                <span>Have a discount coupon?</span>
+              </button>
+            ) : (
+              <form onSubmit={handleApplyCoupon} className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="relative flex-1">
+                    <Tag className="w-3.5 h-3.5 text-[#71717A] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <input
+                      type="text"
+                      value={couponCode}
+                      onChange={(e) => {
+                        setCouponCode(e.target.value.toUpperCase());
+                        if (couponError) setCouponError("");
+                      }}
+                      placeholder="Enter promo code (e.g. WELCOME10)"
+                      className="w-full h-10 pl-9 pr-3 rounded-xl border border-[#EAE6DF] text-xs font-mono font-bold uppercase placeholder:font-normal placeholder:normal-case focus:outline-none focus:border-[#06262B]"
+                      autoFocus
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={validatingCoupon || !couponCode.trim()}
+                    className="h-10 px-4 rounded-xl bg-[#06262B] hover:bg-[#FF312C] text-white font-bold text-xs transition disabled:opacity-40 flex-shrink-0"
+                  >
+                    {validatingCoupon ? "Checking..." : "Apply"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsCouponOpen(false);
+                      setCouponError("");
+                    }}
+                    className="h-10 w-10 flex items-center justify-center rounded-xl border border-[#EAE6DF] hover:bg-[#FAF9F5] text-[#71717A] flex-shrink-0"
+                    title="Close"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                {couponError && (
+                  <div className="p-2.5 bg-red-50 border border-red-200 text-red-700 text-[11px] rounded-xl flex items-center gap-1.5">
+                    <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                    <span>{couponError}</span>
+                  </div>
+                )}
+              </form>
+            )}
+          </div>
+        )}
+      </div>
+
       {/* 3. Streamlined, Unified Purchase Actions */}
       <div className="space-y-4 pt-2">
         {/* Primary Action: Direct WhatsApp Concierge */}
@@ -162,7 +339,18 @@ export function ProductActions({
             className="flex items-center justify-center gap-3 w-full h-15 sm:h-16 px-8 rounded-2xl bg-[#06262B] hover:bg-[#0B3B42] text-white font-extrabold text-base sm:text-lg shadow-md hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all group"
           >
             <MessageCircle className="w-6 h-6 text-[#25D366] group-hover:scale-110 transition-transform flex-shrink-0" />
-            <span className="tracking-wide">Order on WhatsApp</span>
+            <span className="tracking-wide">
+              {appliedCoupon ? (
+                <span>
+                  Order on WhatsApp{" "}
+                  <span className="opacity-90 font-medium text-sm sm:text-base">
+                    (₹{effectivePrice.toLocaleString("en-IN")})
+                  </span>
+                </span>
+              ) : (
+                "Order on WhatsApp"
+              )}
+            </span>
           </a>
           <p className="text-[11px] sm:text-xs text-center text-[#71717A] font-light">
             Instant size guidance, live stock check & direct concierge ordering

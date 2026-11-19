@@ -38,13 +38,14 @@ export function Navbar({ categories = [], whatsappPhone = "+919876543210" }: Nav
 
             {/* Brand Logo */}
             <div className="flex items-center">
-              <Link href="/" className="relative block h-7 md:h-9 w-36 md:w-44 focus:outline-none">
+              <Link href="/" className="block focus:outline-none">
                 <Image
                   src="/brand/Bellawomen-default.svg"
                   alt="BellaWoman"
-                  fill
+                  width={180}
+                  height={36}
                   priority
-                  className="object-contain object-left"
+                  className="h-7 md:h-9 w-auto object-contain object-left"
                 />
               </Link>
             </div>

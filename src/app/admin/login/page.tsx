@@ -43,12 +43,13 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-md bg-white rounded-3xl p-8 sm:p-10 shadow-2xl border border-[#EAE6DF]">
         {/* Brand Header */}
         <div className="text-center space-y-3 mb-8">
-          <div className="relative h-8 w-44 mx-auto mb-2">
+          <div className="block mx-auto mb-2 flex justify-center">
             <Image
               src="/brand/Bellawomen-default.svg"
               alt="BellaWoman"
-              fill
-              className="object-contain"
+              width={180}
+              height={36}
+              className="h-8 w-auto object-contain"
               priority
             />
           </div>

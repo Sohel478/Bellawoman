@@ -25,12 +25,13 @@ export function Footer({
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 lg:gap-16">
           {/* Brand Info */}
           <div className="space-y-4 md:col-span-1">
-            <Link href="/" className="relative block h-8 w-40">
+            <Link href="/" className="block">
               <Image
                 src="/brand/Bellawomen-Logo-Dark-BG.svg"
                 alt="BellaWoman"
-                fill
-                className="object-contain object-left"
+                width={170}
+                height={34}
+                className="h-8 w-auto object-contain object-left"
               />
             </Link>
             <p className="text-sm text-white/70 leading-relaxed font-light">

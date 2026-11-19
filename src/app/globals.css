@@ -1,26 +1,26 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@layer base {
-  :root {
-    --brand-poppy: #ff312c;
-    --brand-poppy-hover: #e02621;
-    --brand-poppy-light: #fff2f1;
-    --brand-teal: #06262b;
-    --brand-teal-light: #0b3b42;
-    --brand-sand: #faf9f5;
-    --brand-cream: #f4efea;
-    --brand-border: #eae6df;
-    --brand-text-primary: #18181b;
-    --brand-text-muted: #71717a;
-  }
+:root {
+  --brand-poppy: #ff312c;
+  --brand-poppy-hover: #e02621;
+  --brand-poppy-light: #fff2f1;
+  --brand-teal: #06262b;
+  --brand-teal-light: #0b3b42;
+  --brand-sand: #faf9f5;
+  --brand-cream: #f4efea;
+  --brand-border: #eae6df;
+  --brand-text-primary: #18181b;
+  --brand-text-muted: #71717a;
+}
 
-  body {
-    background-color: var(--brand-sand);
-    color: var(--brand-text-primary);
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+body {
+  background-color: #faf9f5;
+  color: #18181b;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Custom animation & utility helpers */

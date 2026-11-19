@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
-import { WhatsAppFloatingButton } from "@/components/layout/WhatsAppFloatingButton";
-import { getSiteSettings, getPublishedCategories } from "@/lib/db";
+import { getSiteSettings } from "@/lib/db";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
@@ -51,35 +47,15 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [settings, categories] = await Promise.all([
-    getSiteSettings(),
-    getPublishedCategories(),
-  ]);
-
-  const announcementEnabled = settings.announcementEnabled === "true";
-  const whatsappPhone = settings.whatsappPhone || "+919876543210";
-
   return (
     <html lang="en">
       <body className="min-h-screen flex flex-col font-sans selection:bg-[#FF312C] selection:text-white">
-        <AnnouncementBar
-          text={settings.announcementText}
-          enabled={announcementEnabled}
-        />
-        <Navbar categories={categories} whatsappPhone={whatsappPhone} />
-        <main className="flex-1">{children}</main>
-        <Footer
-          whatsappPhone={whatsappPhone}
-          contactEmail={settings.contactEmail}
-          instagramUrl={settings.instagramUrl}
-          footerAbout={settings.footerAbout}
-        />
-        <WhatsAppFloatingButton whatsappPhone={whatsappPhone} />
+        {children}
       </body>
     </html>
   );

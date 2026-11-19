@@ -20,7 +20,7 @@ export function HeroBanner({ banner }: HeroBannerProps) {
   return (
     <section className="relative w-full overflow-hidden bg-[#06262B] text-white">
       {/* Background Media with Gradient Overlay */}
-      <div className="relative h-[540px] sm:h-[620px] lg:h-[700px] w-full">
+      <div className="relative min-h-[500px] sm:min-h-[600px] lg:min-h-[680px] w-full flex items-end">
         {/* Desktop Image */}
         <div className="hidden sm:block absolute inset-0">
           <Image
@@ -28,7 +28,7 @@ export function HeroBanner({ banner }: HeroBannerProps) {
             alt={banner?.altText || title}
             fill
             priority
-            className="object-cover object-center"
+            className="object-cover object-top"
             sizes="100vw"
           />
         </div>
@@ -40,17 +40,17 @@ export function HeroBanner({ banner }: HeroBannerProps) {
             alt={banner?.altText || title}
             fill
             priority
-            className="object-cover object-center"
+            className="object-cover object-top"
             sizes="100vw"
           />
         </div>
 
         {/* Sophisticated Editorial Vignette & Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#06262B] via-[#06262B]/40 to-transparent opacity-90 sm:opacity-80" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#06262B] via-[#06262B]/50 to-transparent opacity-95 sm:opacity-85" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#06262B]/80 via-[#06262B]/30 to-transparent" />
 
         {/* Content Container */}
-        <div className="relative z-10 max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-end pb-16 sm:pb-24 lg:pb-28">
+        <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pb-12 sm:pb-20 lg:pb-24">
           <div className="max-w-2xl space-y-4 sm:space-y-6">
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/20">
               <Sparkles className="w-3.5 h-3.5 text-[#FF312C]" />

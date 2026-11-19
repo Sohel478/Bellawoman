@@ -46,12 +46,13 @@ export function AdminSidebar({ adminName = "Admin" }: AdminSidebarProps) {
       <div className="space-y-6">
         {/* Brand Logo */}
         <div className="p-3 border-b border-white/10">
-          <Link href="/admin" className="relative block h-7 w-36">
+          <Link href="/admin" className="block">
             <Image
               src="/brand/Bellawomen-Logo-Dark-BG.svg"
               alt="BellaWoman Admin"
-              fill
-              className="object-contain"
+              width={160}
+              height={32}
+              className="h-7 w-auto object-contain"
             />
           </Link>
           <div className="flex items-center gap-1.5 mt-3 text-[10px] font-mono text-[#FF312C] uppercase tracking-wider">

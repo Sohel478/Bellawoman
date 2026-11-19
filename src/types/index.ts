@@ -98,6 +98,8 @@ export interface SiteSettingsMap {
   contactEmail?: string;
   contactPhone?: string;
   instagramUrl?: string;
+  instagramAccessToken?: string;
+  instagramUserId?: string;
   facebookUrl?: string;
   footerAbout?: string;
   seoTitle?: string;

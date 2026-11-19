@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, Sparkles, Heart, Zap, Award } from "lucide-react";
 import { Metadata } from "next";
 import { getSiteSettings } from "@/lib/db";
+import { fetchInstagramMedia } from "@/lib/instagram";
 import { InstagramVideoSection } from "@/components/instagram/InstagramVideoSection";
 
 export const metadata: Metadata = {
@@ -10,10 +11,16 @@ export const metadata: Metadata = {
   description: "Learn about BellaWoman — where high-performance engineering meets contemporary Gen Z fashion and activewear.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function AboutPage() {
   const settings = await getSiteSettings();
   const instagramUrl = settings.instagramUrl || "https://www.instagram.com/official_bellawoman?knvt=MTlud2ZpYmxhMTV0ZQ%3D%3D&utm_source=qr";
-  const whatsappPhone = settings.whatsappPhone || "+919876543210";
+  const whatsappPhone = settings.whatsappPhone || "+917249498924";
+  const accessToken = settings.instagramAccessToken;
+  const userId = settings.instagramUserId;
+
+  const instagramFeed = await fetchInstagramMedia(accessToken, userId, 12);
 
   return (
     <div className="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -96,6 +103,9 @@ export default async function AboutPage() {
       <InstagramVideoSection
         instagramUrl={instagramUrl}
         whatsappPhone={whatsappPhone}
+        initialItems={instagramFeed.items}
+        isConnected={instagramFeed.connected}
+        errorMessage={instagramFeed.error}
       />
     </div>
   );

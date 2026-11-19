@@ -96,21 +96,8 @@ async function main() {
   });
   console.log("✅ Hero Banner seeded.");
 
-  // 5. Products catalog data for the 19 SKUs
+  // 5. Products catalog data for the 18 authentic photo-verified SKUs
   const rawProducts = [
-    {
-      sku: "BR-1012",
-      name: "Contour Racerback Sports Bra",
-      slug: "contour-racerback-sports-bra-br1012",
-      price: 699,
-      origPrice: 1299,
-      badge: "New Drop",
-      isNew: true,
-      isFeatured: false,
-      isTrending: false,
-      isBest: false,
-      images: ["/products/BR-1012-2.jpg"],
-    },
     {
       sku: "BR-1013",
       name: "Seamless Ribbed Sculpt Bra",

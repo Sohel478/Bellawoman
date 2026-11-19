@@ -16,17 +16,17 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
   const currentImage = validImages[selectedIndex] || validImages[0];
 
   return (
-    <div className="flex flex-col-reverse lg:flex-row gap-4 lg:gap-6">
+    <div className="flex flex-col-reverse lg:flex-row gap-4 lg:gap-6 items-start">
       {/* Thumbnails Column / Row */}
       {validImages.length > 1 && (
-        <div className="flex lg:flex-col gap-3 overflow-x-auto lg:overflow-y-auto max-h-[560px] pb-2 lg:pb-0 no-scrollbar">
+        <div className="flex lg:flex-col gap-3 overflow-x-auto lg:overflow-y-auto max-h-[580px] pb-2 lg:pb-0 no-scrollbar flex-shrink-0">
           {validImages.map((img, idx) => (
             <button
               key={img.id || idx}
               onClick={() => setSelectedIndex(idx)}
               className={`relative w-16 h-20 sm:w-20 sm:h-24 flex-shrink-0 rounded-xl overflow-hidden border-2 transition-all ${
                 selectedIndex === idx
-                  ? "border-[#FF312C] shadow-sm scale-102"
+                  ? "border-[#FF312C] shadow-sm ring-2 ring-[#FF312C]/20"
                   : "border-[#EAE6DF] hover:border-[#06262B]/30 opacity-75 hover:opacity-100"
               }`}
               aria-label={`View image ${idx + 1}`}
@@ -44,7 +44,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
       )}
 
       {/* Main Feature View */}
-      <div className="relative flex-1 aspect-[3/4] rounded-2xl overflow-hidden bg-white border border-[#EAE6DF] shadow-xs">
+      <div className="relative w-full flex-1 max-w-[560px] aspect-[3/4] rounded-2xl overflow-hidden bg-white border border-[#EAE6DF] shadow-xs">
         <Image
           src={currentImage.imagePath}
           alt={currentImage.altText || productName}

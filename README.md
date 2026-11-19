@@ -11,7 +11,7 @@ A fresh, modern, mobile-first product discovery and social commerce platform for
   - **Buy on Meesho & Amazon:** Configured outbound marketplace buttons with safe external linking (`rel="noopener noreferrer"`).
   - **Order on WhatsApp:** Instant pre-filled inquiry builder (`wa.me`) capturing product title, SKU, price, selected size, and colour variant.
   - **Strictly No Cart or Checkout:** Eliminates checkout drop-off, customer account friction, and payment compliance overhead.
-- **Dynamic Activewear Collection:** 18 seeded authentic BellaWoman SKUs (`BR-1013` to `BR-1091`) with high-resolution multi-angle photos, multi-size (XS to XL), and multi-colour options.
+- **Dynamic Activewear Collection:** 18 seeded authentic BellaWoman SKUs (`BR-1012` to `BR-1091`) with high-resolution multi-angle photos, multi-size (XS to XL), and multi-colour options.
 - **Full Admin CMS Portal (`/admin`):**
   - **Dashboard:** Operational metrics on live products, drafts, collections, and marketplace links.
   - **Categories:** Create, edit, reorder, and toggle publish status.

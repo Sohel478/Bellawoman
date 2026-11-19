@@ -33,9 +33,9 @@ const DEFAULT_REELS: InstagramVideoItem[] = [
     category: "Try-On Reel",
     coverImage: "/hero/hero-br1013.jpg",
     views: "18.4K",
-    productSlug: "seamless-ribbed-sculpt-bra-br1013",
-    productName: "Seamless Ribbed Sculpt Bra",
-    productPrice: 799,
+    productSlug: "contour-racerback-sports-bra-br1012",
+    productName: "Contour Racerback Sports Bra",
+    productPrice: 699,
     reelUrl: "https://www.instagram.com/official_bellawoman?knvt=MTlud2ZpYmxhMTV0ZQ%3D%3D&utm_source=qr",
   },
   {

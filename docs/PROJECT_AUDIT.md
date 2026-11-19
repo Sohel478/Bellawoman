@@ -25,7 +25,7 @@ BellaWoman is a modern, fashion-forward women’s apparel brand launching initia
 - **Brand Assets In Stock:**
   - Vector SVG logo files (`Bellawomen-default.svg`, `Bellawomen-Logo-Dark-BG.svg`, `Bellawomen-Logo-Orange-BG.svg`, `Logo-Icon-Orange.svg`, `Logo-Icon-Dark.svg`).
   - Favicon sets (16x16, 32x32 in PNG and SVG formats).
-  - High-resolution authentic product photographs across 18 verified SKUs (`BR-1013` to `BR-1091`) covering front, back, side, and detail angles.
+  - High-resolution authentic product photographs across 18 verified SKUs (`BR-1012` to `BR-1091`) covering front, back, side, and detail angles.
   - Campaign hero imagery (`image-001.jpg`, `image-002.jpg`, `image-010.jpg`, `image-011.jpg`).
 
 ---

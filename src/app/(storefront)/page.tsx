@@ -10,6 +10,8 @@ import { ProductGridSection } from "@/components/home/ProductGridSection";
 import { BrandStorySection } from "@/components/home/BrandStorySection";
 import { WhatsAppCtaBanner } from "@/components/home/WhatsAppCtaBanner";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const [banners, categories, newArrivals, trending, featured, settings] =
     await Promise.all([

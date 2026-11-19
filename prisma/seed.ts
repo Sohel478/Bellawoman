@@ -102,13 +102,13 @@ async function main() {
   // 5. Products catalog data for the 18 authentic photo-verified SKUs
   const rawProducts = [
     {
-      sku: "BR-1013",
-      name: "Seamless Ribbed Sculpt Bra",
-      slug: "seamless-ribbed-sculpt-bra-br1013",
-      price: 799,
-      origPrice: 1399,
-      badge: "Best Seller",
-      isNew: false,
+      sku: "BR-1012",
+      name: "Contour Racerback Sports Bra",
+      slug: "contour-racerback-sports-bra-br1012",
+      price: 699,
+      origPrice: 1299,
+      badge: "New Drop",
+      isNew: true,
       isFeatured: true,
       isTrending: false,
       isBest: true,

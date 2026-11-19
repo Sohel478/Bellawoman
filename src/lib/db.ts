@@ -140,7 +140,7 @@ export async function getPublishedProducts(options?: {
 
 export async function getProductBySlug(slug: string): Promise<ProductItem | null> {
   try {
-    return (await prisma.product.findFirst({
+    let product = await prisma.product.findFirst({
       where: { slug, status: "published", category: { status: "published" } },
       include: {
         images: { orderBy: { sortOrder: "asc" } },
@@ -148,7 +148,26 @@ export async function getProductBySlug(slug: string): Promise<ProductItem | null
         variants: { orderBy: { sortOrder: "asc" } },
         category: true,
       },
-    })) as unknown as ProductItem | null;
+    });
+
+    // Handle slug aliases (e.g. contour-racerback-sports-bra-br1012 <-> seamless-ribbed-sculpt-bra-br1013)
+    if (!product && (slug === "seamless-ribbed-sculpt-bra-br1013" || slug === "contour-racerback-sports-bra-br1012")) {
+      const alternateSlug =
+        slug === "seamless-ribbed-sculpt-bra-br1013"
+          ? "contour-racerback-sports-bra-br1012"
+          : "seamless-ribbed-sculpt-bra-br1013";
+      product = await prisma.product.findFirst({
+        where: { slug: alternateSlug, status: "published", category: { status: "published" } },
+        include: {
+          images: { orderBy: { sortOrder: "asc" } },
+          marketplaceLinks: { where: { isEnabled: true }, orderBy: { sortOrder: "asc" } },
+          variants: { orderBy: { sortOrder: "asc" } },
+          category: true,
+        },
+      });
+    }
+
+    return product as unknown as ProductItem | null;
   } catch (error) {
     console.error("Error fetching product:", error);
     return null;

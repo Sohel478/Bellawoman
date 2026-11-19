@@ -7,6 +7,8 @@ import { ProductActions } from "@/components/products/ProductActions";
 import { ProductCard } from "@/components/products/ProductCard";
 import { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
 }

@@ -112,7 +112,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         </div>
 
         {/* Right Column: Details & Actions (5 Cols on desktop) */}
-        <div className="lg:col-span-5 space-y-6">
+        <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
           {/* Header & Badges */}
           <div>
             <div className="flex items-center gap-2 mb-2">

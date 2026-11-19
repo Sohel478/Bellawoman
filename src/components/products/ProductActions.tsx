@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MessageCircle, ExternalLink, Check, ShoppingBag } from "lucide-react";
+import { MessageCircle, ExternalLink, Check, ShoppingBag, ShieldCheck, Truck, RefreshCw } from "lucide-react";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
 import { getMarketplaceMeta } from "@/lib/marketplace";
 import { ProductItem } from "@/types";
@@ -58,7 +58,9 @@ export function ProductActions({
               Select Size
             </span>
             {selectedSize && (
-              <span className="text-[#71717A] font-medium">Selected: <strong className="text-[#06262B]">{selectedSize}</strong></span>
+              <span className="text-[#71717A] font-medium">
+                Selected: <strong className="text-[#06262B]">{selectedSize}</strong>
+              </span>
             )}
           </div>
           <div className="flex flex-wrap gap-2.5">
@@ -69,9 +71,9 @@ export function ProductActions({
                   key={size}
                   type="button"
                   onClick={() => setSelectedSize(size)}
-                  className={`min-w-[48px] h-11 px-3.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center border ${
+                  className={`min-w-[52px] h-11 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center border ${
                     isSelected
-                      ? "border-[#06262B] bg-[#06262B] text-white shadow-sm"
+                      ? "border-[#06262B] bg-[#06262B] text-white shadow-xs"
                       : "border-[#EAE6DF] bg-white text-[#18181B] hover:border-[#06262B]/40"
                   }`}
                   aria-pressed={isSelected}
@@ -92,7 +94,9 @@ export function ProductActions({
               Select Colour
             </span>
             {selectedColour && (
-              <span className="text-[#71717A] font-medium">Selected: <strong className="text-[#06262B]">{selectedColour}</strong></span>
+              <span className="text-[#71717A] font-medium">
+                Selected: <strong className="text-[#06262B]">{selectedColour}</strong>
+              </span>
             )}
           </div>
           <div className="flex flex-wrap gap-2">
@@ -119,15 +123,39 @@ export function ProductActions({
         </div>
       )}
 
-      {/* 3. Action Buttons Section */}
-      <div className="space-y-3 pt-2">
-        {/* Marketplace Buttons */}
+      {/* 3. Streamlined, Unified Purchase Actions */}
+      <div className="space-y-4 pt-2">
+        {/* Primary Action: Direct WhatsApp Concierge */}
+        <div className="space-y-1.5">
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2.5 w-full h-13 px-6 rounded-2xl bg-[#06262B] hover:bg-[#0B3B42] text-white font-bold text-sm sm:text-base shadow-sm hover:shadow-md transition-all group"
+          >
+            <MessageCircle className="w-5 h-5 text-[#25D366] group-hover:scale-110 transition-transform" />
+            <span>Order on WhatsApp</span>
+          </a>
+          <p className="text-[11px] text-center text-[#71717A] font-light">
+            Instant size guidance, live stock check & direct concierge ordering
+          </p>
+        </div>
+
+        {/* Secondary Marketplace Retail Options */}
         {enabledLinks.length > 0 && (
-          <div className="space-y-2.5">
-            <div className="text-[11px] font-bold uppercase tracking-wider text-[#71717A]">
-              Instant Checkout via Marketplace
+          <div className="space-y-3 pt-1">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-[#EAE6DF]" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-[#FAF9F5] px-3 text-[10px] font-bold text-[#71717A] tracking-wider">
+                  Or buy on marketplace
+                </span>
+              </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+
+            <div className={`grid ${enabledLinks.length === 1 ? "grid-cols-1" : "grid-cols-2"} gap-2.5`}>
               {enabledLinks.map((link) => {
                 const meta = getMarketplaceMeta(link.marketplaceName);
                 return (
@@ -136,11 +164,11 @@ export function ProductActions({
                     href={link.marketplaceUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`flex items-center justify-center gap-2 h-12 px-4 rounded-xl text-xs sm:text-sm font-semibold transition-all shadow-xs hover:shadow-md ${meta.badgeBg}`}
+                    className={`flex items-center justify-center gap-2 h-11 px-4 rounded-xl text-xs font-semibold transition-all ${meta.badgeBg}`}
                   >
-                    <ShoppingBag className="w-4 h-4 flex-shrink-0" />
-                    <span>{meta.badgeText}</span>
-                    <ExternalLink className="w-3.5 h-3.5 opacity-80 flex-shrink-0" />
+                    <span className={`w-2 h-2 rounded-full ${meta.brandAccent} flex-shrink-0`} />
+                    <span className="truncate">{meta.badgeText}</span>
+                    <ExternalLink className="w-3.5 h-3.5 text-[#71717A] opacity-80 flex-shrink-0" />
                   </a>
                 );
               })}
@@ -148,25 +176,20 @@ export function ProductActions({
           </div>
         )}
 
-        {/* WhatsApp Order Action */}
-        <div className="pt-1">
-          {enabledLinks.length > 0 && (
-            <div className="text-center text-xs text-[#71717A] my-2 font-medium">
-              — or talk directly with our stylists —
-            </div>
-          )}
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2.5 w-full h-13 px-6 rounded-xl bg-[#25D366] hover:bg-[#20BA5A] text-white font-bold text-sm sm:text-base shadow-md hover:shadow-lg transition-all"
-          >
-            <MessageCircle className="w-5 h-5 flex-shrink-0" />
-            <span>Order on WhatsApp</span>
-          </a>
-          <p className="text-[11px] text-center text-[#71717A] mt-2 leading-relaxed">
-            ✨ Chat with BellaWoman concierge to confirm your custom fit, sizes, and instant dispatch.
-          </p>
+        {/* Subtle Trust Bar */}
+        <div className="pt-3 border-t border-[#EAE6DF] grid grid-cols-3 gap-2 text-[11px] text-[#71717A] text-center">
+          <div className="flex items-center justify-center gap-1">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#FF312C] flex-shrink-0" />
+            <span>100% Authentic</span>
+          </div>
+          <div className="flex items-center justify-center gap-1">
+            <Truck className="w-3.5 h-3.5 text-[#FF312C] flex-shrink-0" />
+            <span>Fast Dispatch</span>
+          </div>
+          <div className="flex items-center justify-center gap-1">
+            <RefreshCw className="w-3.5 h-3.5 text-[#FF312C] flex-shrink-0" />
+            <span>Easy Exchange</span>
+          </div>
         </div>
       </div>
     </div>

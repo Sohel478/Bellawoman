@@ -18,6 +18,9 @@ export async function generateMetadata(): Promise<Metadata> {
       template: "%s | BellaWoman",
     },
     description,
+    alternates: {
+      canonical: baseUrl,
+    },
     icons: {
       icon: "/favicon.png",
       apple: "/brand/Favicon-Orange-32x32.png",

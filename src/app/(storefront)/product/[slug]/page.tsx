@@ -20,7 +20,9 @@ export async function generateMetadata({
   const product = await getProductBySlug(slug);
   if (!product) return { title: "Product Not Found" };
 
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://bellawoman.com";
   const primaryImage = product.images?.[0]?.imagePath || "/products/image-010.jpg";
+  const imageUrl = primaryImage.startsWith("http") ? primaryImage : `${baseUrl}${primaryImage}`;
 
   return {
     title: product.seoTitle || `${product.name} | BellaWoman`,
@@ -28,10 +30,23 @@ export async function generateMetadata({
       product.seoDescription ||
       product.shortDescription ||
       `Shop ${product.name} (${product.sku}) by BellaWoman. Buy on Meesho & Amazon, or order directly on WhatsApp.`,
+    alternates: {
+      canonical: `${baseUrl}/product/${slug}`,
+    },
     openGraph: {
       title: product.name,
       description: product.shortDescription || "",
-      images: [{ url: primaryImage, width: 800, height: 1000, alt: product.name }],
+      url: `${baseUrl}/product/${slug}`,
+      siteName: "BellaWoman",
+      locale: "en_IN",
+      type: "website",
+      images: [{ url: imageUrl, width: 800, height: 1000, alt: product.name }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product.name,
+      description: product.shortDescription || "",
+      images: [imageUrl],
     },
   };
 }
@@ -49,27 +64,60 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   const whatsappPhone = settings.whatsappPhone || "+919876543210";
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://bellawoman.com";
 
-  // Structured Data (JSON-LD) for genuine product discovery (no fake checkout)
+  // Structured Data (JSON-LD) for Google Rich Results (Product + Breadcrumbs)
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Product",
-    name: product.name,
-    image: product.images?.map((img) => `${baseUrl}${img.imagePath}`) || [],
-    description: product.shortDescription || product.description,
-    sku: product.sku || product.slug,
-    brand: {
-      "@type": "Brand",
-      name: "BellaWoman",
-    },
-    offers: product.displayPrice
-      ? {
-          "@type": "Offer",
-          priceCurrency: product.currency || "INR",
-          price: product.displayPrice,
-          availability: "https://schema.org/InStock",
-          url: `${baseUrl}/product/${product.slug}`,
-        }
-      : undefined,
+    "@graph": [
+      {
+        "@type": "Product",
+        name: product.name,
+        image: product.images?.map((img) =>
+          img.imagePath.startsWith("http") ? img.imagePath : `${baseUrl}${img.imagePath}`
+        ) || [],
+        description: product.shortDescription || product.description,
+        sku: product.sku || product.slug,
+        brand: {
+          "@type": "Brand",
+          name: "BellaWoman",
+        },
+        offers: product.displayPrice
+          ? {
+              "@type": "Offer",
+              priceCurrency: product.currency || "INR",
+              price: product.displayPrice,
+              availability: "https://schema.org/InStock",
+              url: `${baseUrl}/product/${product.slug}`,
+              seller: {
+                "@type": "Organization",
+                name: "BellaWoman",
+              },
+            }
+          : undefined,
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: baseUrl,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: product.category?.name || "Collections",
+            item: `${baseUrl}/category/${product.category?.slug || "activewear"}`,
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: product.name,
+            item: `${baseUrl}/product/${product.slug}`,
+          },
+        ],
+      },
+    ],
   };
 
   return (

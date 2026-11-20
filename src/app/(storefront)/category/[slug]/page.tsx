@@ -24,12 +24,34 @@ export async function generateMetadata({
   const category = await getCategoryBySlug(slug);
   if (!category) return { title: "Category Not Found" };
 
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://bellawoman.com";
+  const image = category.bannerImage || category.image || "/hero/hero-br1083.jpg";
+  const imageUrl = image.startsWith("http") ? image : `${baseUrl}${image}`;
+
   return {
     title: category.seoTitle || `${category.name} Collection`,
     description:
       category.seoDescription ||
       category.shortDescription ||
       `Explore BellaWoman's ${category.name} collection. Buy on Meesho & Amazon, or order directly on WhatsApp.`,
+    alternates: {
+      canonical: `${baseUrl}/category/${slug}`,
+    },
+    openGraph: {
+      title: `${category.name} Activewear Collection | BellaWoman`,
+      description: category.shortDescription || `Shop ${category.name} activewear & fashion.`,
+      url: `${baseUrl}/category/${slug}`,
+      siteName: "BellaWoman",
+      locale: "en_IN",
+      type: "website",
+      images: [{ url: imageUrl, width: 1200, height: 630, alt: category.name }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${category.name} Collection | BellaWoman`,
+      description: category.shortDescription || `Shop ${category.name} activewear & fashion.`,
+      images: [imageUrl],
+    },
   };
 }
 
@@ -57,8 +79,52 @@ export default async function CategoryPage({
   const availableSizes = ["XS", "S", "M", "L", "XL"];
   const availableColours = ["Poppy Red", "Mineral Teal", "Charcoal Black", "Blush Rose"];
 
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://bellawoman.com";
+
+  // Category Collection JSON-LD Schema
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        name: `${category.name} Collection`,
+        description: category.shortDescription || category.description,
+        url: `${baseUrl}/category/${category.slug}`,
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: baseUrl,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Collections",
+            item: `${baseUrl}/categories`,
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: category.name,
+            item: `${baseUrl}/category/${category.slug}`,
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <div className="py-6 sm:py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Inject Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-[#71717A] mb-6">
         <Link href="/" className="hover:text-[#06262B] transition-colors">

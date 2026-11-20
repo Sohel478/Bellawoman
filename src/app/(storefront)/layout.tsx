@@ -15,10 +15,51 @@ export default async function StorefrontLayout({
   ]);
 
   const announcementEnabled = settings.announcementEnabled === "true";
-  const whatsappPhone = settings.whatsappPhone || "+919876543210";
+  const whatsappPhone = settings.whatsappPhone || "+917249498924";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://bellawoman.com";
+
+  // Google Knowledge Graph: Organization & WebSite Structured Data
+  const brandLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        name: settings.brandName || "BellaWoman",
+        url: baseUrl,
+        logo: `${baseUrl}/brand/Bellawomen-Logo-Dark-BG.svg`,
+        sameAs: [
+          settings.instagramUrl || "https://www.instagram.com/official_bellawoman",
+        ].filter(Boolean),
+        contactPoint: [
+          {
+            "@type": "ContactPoint",
+            telephone: settings.contactPhone || "+91 7249498924",
+            contactType: "customer service",
+            areaServed: "IN",
+            availableLanguage: ["en", "hi"],
+          },
+        ],
+      },
+      {
+        "@type": "WebSite",
+        name: settings.brandName || "BellaWoman",
+        url: baseUrl,
+        potentialAction: {
+          "@type": "SearchAction",
+          target: `${baseUrl}/api/search?q={search_term_string}`,
+          "query-input": "required name=search_term_string",
+        },
+      },
+    ],
+  };
 
   return (
     <div className="min-h-screen flex flex-col font-sans">
+      {/* Brand Knowledge Graph JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(brandLd) }}
+      />
       <AnnouncementBar
         text={settings.announcementText}
         enabled={announcementEnabled}

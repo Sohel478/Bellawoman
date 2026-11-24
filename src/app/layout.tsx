@@ -1,6 +1,15 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { getSiteSettings } from "@/lib/db";
+
+export const viewport: Viewport = {
+  themeColor: "#06262B",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: "cover",
+};
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
@@ -18,12 +27,23 @@ export async function generateMetadata(): Promise<Metadata> {
       template: "%s | BellaWoman",
     },
     description,
+    manifest: "/manifest.webmanifest",
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: "black-translucent",
+      title: "BellaWoman",
+    },
     alternates: {
       canonical: baseUrl,
     },
     icons: {
-      icon: "/favicon.png",
-      apple: "/brand/Favicon-Orange-32x32.png",
+      icon: [
+        { url: "/favicon.png" },
+        { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      ],
+      apple: [
+        { url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      ],
     },
     openGraph: {
       title,

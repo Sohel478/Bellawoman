@@ -2,6 +2,8 @@ import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppFloatingButton } from "@/components/layout/WhatsAppFloatingButton";
+import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
+import { PwaProvider } from "@/components/pwa/PwaProvider";
 import { getSiteSettings, getPublishedCategories } from "@/lib/db";
 
 export default async function StorefrontLayout({
@@ -60,12 +62,13 @@ export default async function StorefrontLayout({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(brandLd) }}
       />
+      <PwaProvider />
       <AnnouncementBar
         text={settings.announcementText}
         enabled={announcementEnabled}
       />
       <Navbar categories={categories} whatsappPhone={whatsappPhone} />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 pb-20 md:pb-0">{children}</main>
       <Footer
         whatsappPhone={whatsappPhone}
         contactEmail={settings.contactEmail}
@@ -73,6 +76,7 @@ export default async function StorefrontLayout({
         footerAbout={settings.footerAbout}
       />
       <WhatsAppFloatingButton whatsappPhone={whatsappPhone} />
+      <MobileBottomNav whatsappPhone={whatsappPhone} />
     </div>
   );
 }

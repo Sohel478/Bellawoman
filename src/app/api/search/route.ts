@@ -28,8 +28,11 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json(products);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Search API error:", error);
-    return NextResponse.json({ error: "Failed to search" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to search", message: error?.message || String(error) },
+      { status: 500 }
+    );
   }
 }

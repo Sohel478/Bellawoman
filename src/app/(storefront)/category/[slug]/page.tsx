@@ -6,6 +6,8 @@ import { getCategoryBySlug, getPublishedProducts } from "@/lib/db";
 import { ProductCard } from "@/components/products/ProductCard";
 import { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 interface CategoryPageProps {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{

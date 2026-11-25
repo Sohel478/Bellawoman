@@ -122,6 +122,7 @@ export function ProductForm({ categories, initialData }: ProductFormProps) {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleNameChange = (val: string) => {
     setName(val);
@@ -261,9 +262,19 @@ export function ProductForm({ categories, initialData }: ProductFormProps) {
       // Build variants combinations
       const variantsPayload: Array<{ size: string; colour: string; sortOrder: number }> = [];
       let vIdx = 0;
-      for (const s of selectedSizes) {
+      if (selectedSizes.length > 0 && selectedColours.length > 0) {
+        for (const s of selectedSizes) {
+          for (const c of selectedColours) {
+            variantsPayload.push({ size: s, colour: c, sortOrder: vIdx++ });
+          }
+        }
+      } else if (selectedSizes.length > 0) {
+        for (const s of selectedSizes) {
+          variantsPayload.push({ size: s, colour: "", sortOrder: vIdx++ });
+        }
+      } else if (selectedColours.length > 0) {
         for (const c of selectedColours) {
-          variantsPayload.push({ size: s, colour: c, sortOrder: vIdx++ });
+          variantsPayload.push({ size: "", colour: c, sortOrder: vIdx++ });
         }
       }
 
@@ -305,10 +316,13 @@ export function ProductForm({ categories, initialData }: ProductFormProps) {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to save product");
+      if (!res.ok) throw new Error(data.message || data.error || "Failed to save product");
 
-      router.push("/admin/products");
-      router.refresh();
+      setSuccessMessage("Product saved successfully!");
+      setTimeout(() => {
+        router.push("/admin/products");
+        router.refresh();
+      }, 600);
     } catch (err: any) {
       setError(err.message || "Failed to save product");
     } finally {
@@ -378,6 +392,13 @@ export function ProductForm({ categories, initialData }: ProductFormProps) {
         <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-2xl text-xs flex items-center gap-2 font-medium">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           <span>{error}</span>
+        </div>
+      )}
+
+      {successMessage && (
+        <div className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl text-xs flex items-center gap-2 font-semibold shadow-xs">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>✓ {successMessage}</span>
         </div>
       )}
 
@@ -877,6 +898,49 @@ export function ProductForm({ categories, initialData }: ProductFormProps) {
               <option value="archived">Archived</option>
             </select>
           </div>
+        </div>
+      </div>
+
+      {/* Floating / Sticky Bottom Actions Bar */}
+      <div className="sticky bottom-4 z-30 bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-xl border border-[#EAE6DF] flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <Link
+            href="/admin/products"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#71717A] hover:text-[#06262B] px-3 py-2 rounded-xl transition"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Cancel</span>
+          </Link>
+          {successMessage && (
+            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200">
+              ✓ {successMessage}
+            </span>
+          )}
+          {error && (
+            <span className="text-xs font-medium text-rose-600 bg-rose-50 px-3 py-1.5 rounded-xl border border-rose-200 line-clamp-1 max-w-xs">
+              {error}
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-3 ml-auto">
+          {isEditing && (
+            <button
+              type="button"
+              onClick={handleDelete}
+              disabled={saving}
+              className="px-4 py-2.5 rounded-xl text-xs font-bold text-rose-600 hover:bg-rose-50 border border-rose-200 transition"
+            >
+              Delete Product
+            </button>
+          )}
+          <button
+            type="submit"
+            disabled={saving || uploading}
+            className="inline-flex items-center gap-2 bg-[#FF312C] hover:bg-[#E02621] text-white text-xs font-bold px-6 py-2.5 rounded-xl shadow-md transition disabled:opacity-50"
+          >
+            <Save className="w-4 h-4" />
+            <span>{saving ? "Saving..." : isEditing ? "Save Changes" : "Publish Product"}</span>
+          </button>
         </div>
       </div>
     </form>

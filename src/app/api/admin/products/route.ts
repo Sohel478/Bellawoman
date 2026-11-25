@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { getAdminSession } from "@/lib/auth";
 
@@ -137,6 +138,15 @@ export async function POST(request: NextRequest) {
 
       return p;
     });
+
+    try {
+      revalidatePath("/admin/products");
+      revalidatePath(`/product/${product.slug}`);
+      revalidatePath("/category/activewear");
+      revalidatePath("/");
+    } catch (e) {
+      console.warn("revalidatePath error:", e);
+    }
 
     return NextResponse.json(product);
   } catch (error) {

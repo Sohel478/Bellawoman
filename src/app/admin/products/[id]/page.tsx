@@ -4,6 +4,8 @@ import { getAdminSession } from "@/lib/auth";
 import { ProductForm } from "@/components/admin/ProductForm";
 import { ProductItem, CategoryItem } from "@/types";
 
+export const dynamic = "force-dynamic";
+
 interface EditProductPageProps {
   params: Promise<{ id: string }>;
 }

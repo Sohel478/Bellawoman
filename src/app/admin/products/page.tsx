@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma";
 import { getAdminSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminProductsPage() {
   const session = await getAdminSession();
   if (!session) redirect("/admin/login");

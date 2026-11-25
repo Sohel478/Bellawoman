@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Play, ArrowUpRight, MessageCircle, Sparkles, X, Key, ShieldCheck } from "lucide-react";
+import { Play, ArrowUpRight, MessageCircle, Sparkles, X, ShieldCheck } from "lucide-react";
 import { cleanPhoneNumber } from "@/lib/whatsapp";
 import { InstagramFeedItem } from "@/lib/instagram";
 
@@ -132,14 +132,14 @@ export function InstagramVideoSection({
 
           <div className="space-y-2">
             <h3 className="text-xl sm:text-2xl font-extrabold text-[#06262B]">
-              Stream Live Reels from @official_bellawoman
+              Watch Live Reels on @official_bellawoman
             </h3>
             <p className="text-sm text-[#71717A] max-w-xl mx-auto leading-relaxed">
-              Meta Graph API integration is enabled for this store. Add your Meta Access Token in Admin Settings to stream all your authentic Instagram Reels directly here.
+              Explore authentic fabric stretch, real try-on fits, styling inspiration, and new collection launches directly on our Instagram feed.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+          <div className="flex items-center justify-center pt-2">
             <a
               href={instagramUrl}
               target="_blank"
@@ -150,14 +150,6 @@ export function InstagramVideoSection({
               <span>Watch Reels on Instagram</span>
               <ArrowUpRight className="w-4 h-4" />
             </a>
-
-            <Link
-              href="/admin/settings"
-              className="inline-flex items-center gap-2 bg-white hover:bg-[#FAF9F5] text-[#06262B] text-xs sm:text-sm font-bold px-6 py-3 rounded-full border border-[#EAE6DF] transition"
-            >
-              <Key className="w-4 h-4 text-[#FD1D1D]" />
-              <span>Configure Meta API in Admin</span>
-            </Link>
           </div>
         </div>
       )}

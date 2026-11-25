@@ -7,12 +7,19 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
+const DEFAULT_TURSO_URL = "libsql://bellawoman-techflux.aws-ap-south-1.turso.io";
+const DEFAULT_TURSO_TOKEN =
+  "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3OTU1ODMxNzgsImlkIjoiMDFhMjExMTgtOWQwMS03MzI1LWJjMWQtNjMwNzJmZjYxZTE3Iiwia2lkIjoiUVVMaGFhUkJ3YVdyM2dIMklCY2pIdEZLOTBnLXk4SEZ4eW1vMUVsSXpnWSIsInJpZCI6Ijc4NjJkYzY1LTRmMDAtNDY3ZS1hZGE0LWQxNjU3ZTg0MGQ0YiJ9.9PN87-pnO7fBW1wA5Av02KxT-61rganYLSjr6zqNyqxJ7P8b9UOSKD1F5-WDd1y-X95aBAKji_3MZBgpQRF2Cw";
+
 export function getDatabaseUrl(): string {
-  if (process.env.TURSO_DATABASE_URL) {
-    return process.env.TURSO_DATABASE_URL;
-  }
-  if (process.env.DATABASE_URL && !process.env.DATABASE_URL.startsWith("file:")) {
-    return process.env.DATABASE_URL;
+  const tursoUrl =
+    process.env.TURSO_DATABASE_URL ||
+    (process.env.DATABASE_URL && process.env.DATABASE_URL.startsWith("libsql:")
+      ? process.env.DATABASE_URL
+      : DEFAULT_TURSO_URL);
+
+  if (tursoUrl) {
+    return tursoUrl;
   }
 
   const candidates = [
@@ -36,8 +43,8 @@ function createPrismaClient(): PrismaClient {
     process.env.TURSO_DATABASE_URL ||
     (process.env.DATABASE_URL?.startsWith("libsql:")
       ? process.env.DATABASE_URL
-      : undefined);
-  const tursoAuthToken = process.env.TURSO_AUTH_TOKEN;
+      : DEFAULT_TURSO_URL);
+  const tursoAuthToken = process.env.TURSO_AUTH_TOKEN || DEFAULT_TURSO_TOKEN;
 
   if (tursoUrl && tursoAuthToken) {
     const adapter = new PrismaLibSql({

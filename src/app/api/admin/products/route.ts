@@ -149,10 +149,13 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(product);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Create product error:", error);
     return NextResponse.json(
-      { error: "Failed to create product" },
+      {
+        error: "Failed to create product",
+        message: error?.message || String(error),
+      },
       { status: 500 }
     );
   }

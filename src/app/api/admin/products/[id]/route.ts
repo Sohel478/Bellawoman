@@ -162,10 +162,13 @@ export async function PUT(
     }
 
     return NextResponse.json(updated);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Update product error:", error);
     return NextResponse.json(
-      { error: "Failed to update product" },
+      {
+        error: "Failed to update product",
+        message: error?.message || String(error),
+      },
       { status: 500 }
     );
   }

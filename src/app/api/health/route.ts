@@ -6,10 +6,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   const dbUrl = getDatabaseUrl();
-  const isTurso = Boolean(
-    process.env.TURSO_DATABASE_URL ||
-    (process.env.DATABASE_URL && process.env.DATABASE_URL.startsWith("libsql:"))
-  );
+  const isTurso = dbUrl.startsWith("libsql:");
   const filePath = dbUrl.replace("file:", "");
   const fileExists = isTurso ? true : fs.existsSync(filePath);
 

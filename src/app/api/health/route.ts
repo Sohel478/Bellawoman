@@ -6,8 +6,12 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   const dbUrl = getDatabaseUrl();
+  const isTurso = Boolean(
+    process.env.TURSO_DATABASE_URL ||
+    (process.env.DATABASE_URL && process.env.DATABASE_URL.startsWith("libsql:"))
+  );
   const filePath = dbUrl.replace("file:", "");
-  const fileExists = fs.existsSync(filePath);
+  const fileExists = isTurso ? true : fs.existsSync(filePath);
 
   try {
     const [categoryCount, productCount] = await Promise.all([
@@ -18,8 +22,9 @@ export async function GET() {
     return NextResponse.json({
       status: "ok",
       database: {
-        url: dbUrl,
-        fileExists,
+        provider: isTurso ? "turso-cloud" : "sqlite-local",
+        url: isTurso ? dbUrl.replace(/:[^:@]*@/, ":***@") : dbUrl,
+        connected: true,
         categories: categoryCount,
         products: productCount,
       },
@@ -31,8 +36,9 @@ export async function GET() {
         status: "error",
         error: error.message,
         database: {
-          url: dbUrl,
-          fileExists,
+          provider: isTurso ? "turso-cloud" : "sqlite-local",
+          url: isTurso ? dbUrl.replace(/:[^:@]*@/, ":***@") : dbUrl,
+          connected: false,
         },
         timestamp: new Date().toISOString(),
       },

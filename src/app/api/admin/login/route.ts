@@ -33,11 +33,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Update last login
-    await prisma.adminUser.update({
-      where: { id: admin.id },
-      data: { lastLoginAt: new Date() },
-    });
+    // Update last login (non-fatal if running in read-only environment)
+    try {
+      await prisma.adminUser.update({
+        where: { id: admin.id },
+        data: { lastLoginAt: new Date() },
+      });
+    } catch (updateError) {
+      console.warn("Could not update lastLoginAt (read-only SQLite):", updateError);
+    }
 
     // Set secure cookie session
     await setAdminSession({
@@ -48,10 +52,13 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ success: true, name: admin.name });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Admin login error:", error);
     return NextResponse.json(
-      { error: "Authentication service error." },
+      {
+        error: "Authentication service error.",
+        message: error?.message || String(error),
+      },
       { status: 500 }
     );
   }

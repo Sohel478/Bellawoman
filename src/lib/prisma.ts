@@ -12,6 +12,31 @@ export function getDatabaseUrl(): string {
     return process.env.DATABASE_URL;
   }
 
+  // On Vercel serverless, copy dev.db to /tmp so SQLite is writable
+  if (process.env.VERCEL) {
+    const tmpDbPath = path.join("/tmp", "dev.db");
+    if (!fs.existsSync(tmpDbPath)) {
+      const candidates = [
+        path.join(process.cwd(), "prisma", "dev.db"),
+        path.join(process.cwd(), ".next", "server", "prisma", "dev.db"),
+        path.resolve("./prisma/dev.db"),
+      ];
+      for (const candidate of candidates) {
+        if (fs.existsSync(candidate)) {
+          try {
+            fs.copyFileSync(candidate, tmpDbPath);
+            break;
+          } catch (e) {
+            console.error("Error copying dev.db to /tmp:", e);
+          }
+        }
+      }
+    }
+    if (fs.existsSync(tmpDbPath)) {
+      return `file:${tmpDbPath}`;
+    }
+  }
+
   // Candidate paths to locate dev.db across local development and Vercel serverless environments
   const candidates = [
     path.join(process.cwd(), "prisma", "dev.db"),
